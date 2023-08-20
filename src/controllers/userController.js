@@ -4,7 +4,6 @@ const jwt = require('jsonwebtoken');
 const token = require('../services/RefreshToken');
 const userService = require('../services/userService');
 require('dotenv').config();
-const { ps_validate } = require('../utils/validation');
 
 // User login
 const login = async (req, res) => {
@@ -13,7 +12,7 @@ const login = async (req, res) => {
         const user = await userService.getUser(phone_number);
 
         if (!user) {
-            return res.status(404).json({ message: 'User not found' });
+            return res.status(404).json({ message: 'This number is not registerd' });
         }
 
         const isPasswordMatch = await bcrypt.compare(password, user.password);
@@ -65,7 +64,6 @@ const logout = async (req, res) => {
             return res.status(500).json({ message: 'Failed to log out' });
         }
     } catch (error) {
-        console.error(error);
         return res.status(500).json({ error });
     }
 };
@@ -91,12 +89,32 @@ const registerUser = async (req, res) => {
                 res.status(201).json({ message: 'Successfully registered' });
             })
             .catch(err => {
-                console.log(err);
                 res.status(500).json({ message: err.message });
             });
 
     } catch (error) {
         console.error('Error during user registration:', error);
+        res.status(500).json({ massage: error });
+    }
+};
+
+// Delete user
+const delete_user = async (req, res) => {
+    try {
+        const { id } = req.data;
+        const dbToken = await token.getToken(id);
+        if (!dbToken) {
+            return res.status(401).json({ message: 'refresh key not found' });
+        }
+        const removed = await token.removeToken(id);
+        if (removed === undefined) {
+            await userService.deleteUserById(req.data.id)
+            return res.status(200).json({ message: "User removed successfully" });
+        } else {
+            return res.status(500).json({ message: 'Failed to log out' });
+        }
+    } catch (error) {
+        console.error('Error during user removing:', error);
         res.status(500).json({ massage: error });
     }
 };
@@ -126,84 +144,32 @@ const showUser = async (req, res) => {
         }
     } catch (error) {
         console.error('Error while fetching user:', error);
-        res.status(500).json({ massage: err.message });
+        res.status(500).json({ massage: error });
     }
 };
-
-
-// Update a user details 
-
-// update phone number
-const update_phone = async (req, res) => {
-    try {
-        const errors = validationResult(req);
-        if (!errors.isEmpty()) {
-            return res.status(400).json({ errors: errors.array() });
-        }
-
-        const { phone_number } = req.body;
-        const { id } = req.data;
-        console.log(req.body);
-
-        const updatedUser = await userService.updatePhone(phone_number, id);
-
-        if (updatedUser[0] !== 0) {
-            res.status(200).json({ message: 'Phone number successfully updated' });
-        } else {
-            res.status(404).json({ message: 'User not found' });
-        }
-    } catch (error) {
-        console.error('Error while updating user:', error);
-        res.status(500).json({ massage: err.message });
-    }
-};
-
 
 // update password
-const update_password = async (req, res) => {
-    const { new_pswd, old_pswd } = req.body;
-    const { id } = req.data;
-    console.log( req.body)
-
-    // try {
-    //     const user = await userService.getPswd(id);
-    //     if (!user) {
-    //         return res.status(404).json({ message: 'User not found' });
-    //     }
-    //     const isPasswordMatch = await bcrypt.compare(old_pswd, user.password);
-    //     if (isPasswordMatch) {
-    //         await userService.updatepswd(new_pswd, id);
-    //         res.json({ message: 'Password successfully updated' });
-    //     } else {
-    //         res.status(401).json({ message: 'Old password does not match' });
-    //     }
-    // } catch (error) {
-    //     console.error('Error while updating user:', error);
-    //     res.status(500).json({ error });
-    // }
-}
-
-// password validations
-const password_validate = async (req, res) => {
+const password_update = async (req, res) => {
     try {
+        const { new_pswd, old_pswd } = req.body;
         const { id } = req.data;
-        const { password } = req.body;
-        console.log(password);
 
         const user = await userService.getPswd(id);
         if (!user) {
             return res.status(404).json({ message: 'User not found' });
         }
 
-        const isPasswordMatch = await bcrypt.compare(password, user.password);
+        const isPasswordMatch = await bcrypt.compare(old_pswd, user.password);
         if (isPasswordMatch) {
-            res.json({ isPasswordMatch });
+            await userService.updatepswd(new_pswd, id);
+            res.json({ message: 'Password successfully updated' });
         } else {
-            res.json({ isPasswordMatch});
+            console.log(isPasswordMatch)
+            res.json({ message: 'Wrong password try agin' });
         }
     } catch (error) {
-        console.error('Error while validating password:', error);
-        res.status(500).json({ error: 'Error while validating password' });
+        console.error('Error while updating password:', error);
+        res.status(500).json({ error: 'Error while updating password' });
     }
 };
 
@@ -214,7 +180,6 @@ module.exports = {
     showUsers,
     showUser,
     logout,
-    update_phone,
-    update_password,
-    password_validate
+    password_update,
+    delete_user
 };

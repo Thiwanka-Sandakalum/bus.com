@@ -4,7 +4,7 @@ const router = express.Router();
 const { auth, authRefreshToken } = require('../middlewares/authenticationMiddleware');
 const { bus_search } = require('../controllers/searchController');
 const { customer_auth } = require('../middlewares/authorizationMiddleware');
-const { registerUser, showUsers, showUser, logout, login ,update_password,password_validate} = require('../controllers/userController');
+const { registerUser, showUsers, showUser, logout, login, update_password, update_phone, password_update, delete_user } = require('../controllers/userController');
 
 // Validation rules for registerUser and updateUser
 const userValidationRules = [
@@ -35,15 +35,14 @@ router.post('/', userValidationRules, registerUser);
 
 
 router.get('/details', customer_auth, auth, showUser);
-// router.get('/pswd',password_validate);
-router.post('/pswd',auth,password_validate);
+// router.get('/pswd',password_update);
+router.put('/password', customer_auth, auth, password_update);
 
+// router.put('/phone',customer_auth,auth,update_phone)
 
-
-
-
-router.put('/', auth,update_password);
 
 router.delete('/logout', auth, logout);
+
+router.delete('/',auth,delete_user);
 
 module.exports = router;

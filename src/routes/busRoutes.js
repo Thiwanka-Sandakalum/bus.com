@@ -24,10 +24,10 @@ const registerBusRules = [
 ];
 
 // Routes
-router.get('/', showBuses);
-router.get('/:busId', showBus);
+// router.get('/', showBuses);
+// router.get('/:busId', showBus);
 router.post('/', registerBusRules, registerBus);
-router.put('/:busId', updateBus);
-router.delete('/:busId', deleteBus);
+// router.put('/:busId', updateBus);
+// router.delete('/:busId', deleteBus);
 
 module.exports = router;

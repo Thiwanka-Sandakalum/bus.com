@@ -55,14 +55,6 @@ async function updatepswd(new_password, User_Id) {
 
 
 // phone_number
-async function updatePhone(id, phone_number) {
-    await User.update({ phone_number: phone_number }, {
-        where: {
-            id: id
-        }
-    });
-}
-
 
 
 // deletes
@@ -82,6 +74,5 @@ module.exports = {
     getUserById,
     getPswd,
     updatepswd,
-    deleteUserById,
-    updatePhone
+    deleteUserById
 };

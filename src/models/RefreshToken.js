@@ -3,7 +3,7 @@ const { v4: uuidv4 } = require('uuid');
 const { sequelize } = require('../config/database');
 
 const RefreshToken = sequelize.define(
-    'RefreshTokens',
+    'RefreshToken',
     {
         id: {
             type: DataTypes.UUID, // Use UUID type for the ID

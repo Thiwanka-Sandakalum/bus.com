@@ -5,7 +5,8 @@ const RefreshToken = require('../models/RefreshToken');
 
 // Define a scheduled job to remove expired tokens
 function scheduleTokenCleanup() {
-    cron.schedule('* * * * *', async () => {
+    // Run the cleanup task every hour (at the beginning of the hour)
+    cron.schedule('0 * * * *', async () => {
         try {
             const now = new Date();
             const expiredTokens = await RefreshToken.findAll({
