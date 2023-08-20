@@ -19,7 +19,7 @@ const corsOptions = {
 const PORT = 3000 || environment.port;
 app.use(bodyparser.urlencoded({ extended: true }))
 app.use(bodyparser.json())
-app.use(cors());
+//app.use(cors());
 
 
 app.use('/user',cors(corsOptions), user_router);
