@@ -4,7 +4,8 @@
   "description": "This is a online bus booking application",
   "main": "app.js",
   "scripts": {
-    "dev": "nodemon run src/app.js"
+    "dev": "nodemon run src/app.js",
+    "start":"node src/app.js"
   },
   "author": "",
   "license": "ISC",
