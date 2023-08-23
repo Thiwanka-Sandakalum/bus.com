@@ -5,12 +5,10 @@ async function createBooking(bookingData) {
     return await Booking.create(bookingData);
 }
 
-async function getbooking_count(from, to, date, bus_id) {
+async function getbooking_count(date, bus_id) {
     return await Booking.count({
         where: {
-            from: from,
-            to: to,
-            date: date,
+            booking_date: date,
             bus_id: bus_id
         }
     })
