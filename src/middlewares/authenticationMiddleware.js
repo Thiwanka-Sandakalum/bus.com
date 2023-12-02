@@ -36,7 +36,7 @@ const authRefreshToken = async (req, res) => {
       return res.sendStatus(401).json({ massage: "refresh_token required" });
     }
 
-    const dbToken = await getToken(refresh_token); // get the refresh token from the db
+    const dbToken = await getToken(refresh_token);
 
     if (!dbToken) {
       return res.sendStatus(401);

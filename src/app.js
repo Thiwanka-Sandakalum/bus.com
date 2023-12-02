@@ -1,32 +1,35 @@
 const express = require('express');
 const app = express();
 const cors = require('cors');
-const bodyparser = require('body-parser')
 const user_router = require('./routes/userRoutes');
 const bus_router = require('./routes/busRoutes');
 const booking_router = require('./routes/bookingRoutes');
 const { scheduleTokenCleanup } = require('./utils/token_handle');
-require('dotenv').config()
+const {logger,apiLogger} = require('./logger/index');
+require('dotenv').config();
 
-// Start the scheduled job for token cleanup
 scheduleTokenCleanup();
 
-// const corsOptions = {
-//     origin: process.env.origin,
-//     methods: '*' // Allow all methods
-// };
+var corsOptions = {
+    origin: process.env.ORIGIN_URL
+}
 
-const PORT = 3000 || environment.port;
-app.use(bodyparser.urlencoded({ extended: true }))
-app.use(bodyparser.json())
+app.use((req, res, next) => {
+    apiLogger.http(`${req.method} ${req.url}`);
+    next();
+  });
+  
+const PORT = 3000 || process.env.PORT;
+
+app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
 app.use(cors());
 
 
-app.use('/user', user_router);
+app.use('/user', cors(corsOptions), user_router);
+app.use('/bus', cors(corsOptions), bus_router);
+app.use('/booking', cors(corsOptions), booking_router);
 
-app.use('/bus', bus_router);
-
-app.use('/booking', booking_router);
-
-
-app.listen(PORT, console.log(`server listening on port ${PORT}`));
+app.listen(PORT, () => {
+    logger.info(`Server listening on port ${PORT}`);
+});

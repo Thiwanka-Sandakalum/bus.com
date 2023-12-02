@@ -1,14 +1,14 @@
 const { DataTypes } = require('sequelize');
 const { v4: uuidv4 } = require('uuid');
-const { sequelize } = require('../config/database'); // Assuming you have a Sequelize instance configured
+const { sequelize } = require('../config/database');
 const User = require('./user');
 const Bus = require('./bus');
 
 
 const Booking = sequelize.define('Bookings', {
   id: {
-    type: DataTypes.UUID, // Use UUID type for the ID
-    defaultValue: () => uuidv4(), // Set a default value to generate UUIDs
+    type: DataTypes.UUID,
+    defaultValue: () => uuidv4(),
     primaryKey: true,
   },
   booking_date: {
@@ -32,7 +32,6 @@ const Booking = sequelize.define('Bookings', {
 Booking.belongsTo(User, { foreignKey: 'user_id' });
 Booking.belongsTo(Bus, { foreignKey: 'bus_id' });
 
-// Create the bookings table if it doesn't exist
 Booking.sync()
   .then(() => {
     console.log('Booking table created successfully.');

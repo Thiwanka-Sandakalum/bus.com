@@ -1,11 +1,10 @@
 const cron = require('node-cron');
 const { Op } = require('sequelize');
-const { removeToken } = require('../services/RefreshToken'); // Import your removeToken function
+const { removeToken } = require('../services/RefreshToken');
 const RefreshToken = require('../models/RefreshToken');
+const { logger } = require('../logger/index');
 
-// Define a scheduled job to remove expired tokens
 function scheduleTokenCleanup() {
-    // Run the cleanup task every hour (at the beginning of the hour)
     cron.schedule('0 * * * *', async () => {
         try {
             const now = new Date();
@@ -19,10 +18,10 @@ function scheduleTokenCleanup() {
 
             for (const token of expiredTokens) {
                 await removeToken(token.user_id);
-                console.log(`Expired token removed for user ${token.user_id}`);
+                logger.info(`Expired token removed for user ${token.user_id}`);
             }
         } catch (error) {
-            console.error('Error during token cleanup:', error);
+            logger.error(`Error during token cleanup: ${error.message}`);
         }
     });
 }
