@@ -27,7 +27,7 @@ async function getBooking(user_id) {
             {
                 model: Bus,
                 attributes: ['vehicle_number', 'from', 'to', 'available_dates', 'available_times', 'fees', 'seat_count', 'facilities'],
-                required: true, // This ensures that only bookings with associated buses are returned
+                required: true,
             },
         ],
     });

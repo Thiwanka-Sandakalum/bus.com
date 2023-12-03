@@ -5,8 +5,8 @@ const User = require('./user');
 
 const Bus = sequelize.define('Bus', {
   id: {
-    type: DataTypes.UUID, // Use UUID type for the ID
-    defaultValue: () => uuidv4(), // Set a default value to generate UUIDs
+    type: DataTypes.UUID,
+    defaultValue: () => uuidv4(),
     primaryKey: true,
   },
   vehicle_number: {

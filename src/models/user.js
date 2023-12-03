@@ -7,8 +7,8 @@ const User = sequelize.define(
     'User',
     {
         id: {
-            type: DataTypes.UUID, // Use UUID type for the ID
-            defaultValue: () => uuidv4(), // Set a default value to generate UUIDs
+            type: DataTypes.UUID,
+            defaultValue: () => uuidv4(),
             primaryKey: true,
         },
         name: {

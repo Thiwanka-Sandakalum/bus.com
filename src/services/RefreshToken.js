@@ -10,7 +10,7 @@ async function createToken(user_id, refresh_token) {
         const decodedToken = jwt.decode(refresh_token);
 
         if (decodedToken && decodedToken.exp) {
-            const expirationDate = new Date(decodedToken.exp * 1000); // Convert Unix timestamp to milliseconds
+            const expirationDate = new Date(decodedToken.exp * 1000);
             console.log('Refresh token expires on:', expirationDate);
 
             await RefreshToken.create({

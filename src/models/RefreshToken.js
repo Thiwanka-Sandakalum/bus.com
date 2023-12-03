@@ -6,8 +6,8 @@ const RefreshToken = sequelize.define(
     'RefreshToken',
     {
         id: {
-            type: DataTypes.UUID, // Use UUID type for the ID
-            defaultValue: () => uuidv4(), // Set a default value to generate UUIDs
+            type: DataTypes.UUID,
+            defaultValue: () => uuidv4(),
             primaryKey: true,
         },
         user_id: {
@@ -25,8 +25,8 @@ const RefreshToken = sequelize.define(
         },
     },
     {
-        tableName: 'refresh_tokens', // Specify the table name if different from the model name
-        timestamps: true, // Set to false if you don't want Sequelize to automatically manage createdAt and updatedAt fields
+        tableName: 'refresh_tokens',
+        timestamps: true,
     }
 );
 

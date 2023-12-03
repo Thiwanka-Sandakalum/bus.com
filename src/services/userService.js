@@ -1,8 +1,5 @@
 const User = require('../models/user');
 
-
-// creates
-
 async function createUser(name, phone_number, password, role) {
     await User.create(
         {
@@ -13,8 +10,6 @@ async function createUser(name, phone_number, password, role) {
         }
     );
 }
-
-// reads
 
 async function getUsers() {
     return await User.findAll();
@@ -37,9 +32,6 @@ async function getPswd(id) {
     });
 }
 
-// updates
-
-// pswd
 async function updatepswd(new_password, User_Id) {
     return await User.update(
         {
@@ -52,12 +44,6 @@ async function updatepswd(new_password, User_Id) {
         }
     )
 }
-
-
-// phone_number
-
-
-// deletes
 
 async function deleteUserById(Id) {
     return await User.destroy({
